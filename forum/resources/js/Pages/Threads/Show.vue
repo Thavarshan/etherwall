@@ -17,7 +17,7 @@
                 </h2>
 
                 <div class="max-w-3xl">
-                    <p class="text-gray-500">
+                    <p class="text-gray-600">
                         {{ thread.body }}
                     </p>
                 </div>
@@ -51,10 +51,14 @@
                                 <form class="max-w-xl">
                                     <textarea v-model="form.body" placeholder="Type your reply" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm w-full" rows="3"></textarea>
 
-                                    <div class="mt-3">
+                                    <div class="mt-3 flex items-center">
                                         <PrimaryButton type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                                             Reply
                                         </PrimaryButton>
+
+                                        <div class="ml-3 text-xs text-gray-400">
+                                            <span>You may use Markdown with GitHub-flavored code blocks. </span>
+                                        </div>
                                     </div>
                                 </form>
                             </div>

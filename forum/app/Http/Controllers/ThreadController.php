@@ -26,7 +26,7 @@ class ThreadController extends Controller
                     $query->where('user_id', $user->id);
                 })
                 ->with(['user', 'category'])
-                ->get(),
+                ->paginate(10),
         ]);
     }
 
