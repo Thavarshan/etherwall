@@ -54,8 +54,8 @@ const logout = () => {
                                     Discussions
                                 </NavLink>
 
-                                <NavLink href="/" :active="route().current('channels.index')">
-                                    Channels
+                                <NavLink href="/" :active="route().current('categories.index')">
+                                    Categories
                                 </NavLink>
                             </div>
                         </div>

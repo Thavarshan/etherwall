@@ -12,6 +12,16 @@ use App\Http\Requests\UpdateThreadRequest;
 class ThreadController extends Controller
 {
     /**
+     * Create new Controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('analyse.text')->only(['store', 'update']);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -51,9 +61,11 @@ class ThreadController extends Controller
      */
     public function store(StoreThreadRequest $request)
     {
-        $thread = Thread::create($request->validated());
+        $thread = $request->user()
+            ->threads()
+            ->create($request->validated());
 
-        return response()->redirectToRoute('threads.show', $thread, 201);
+        return redirect(route('threads.show', $thread, 201));
     }
 
     /**
@@ -96,7 +108,7 @@ class ThreadController extends Controller
 
         $thread->fresh();
 
-        return response()->redirectToRoute('threads.show', $thread);
+        return redirect(route('threads.show', $thread));
     }
 
     /**
@@ -110,6 +122,6 @@ class ThreadController extends Controller
     {
         $thread->delete();
 
-        return response()->redirectToRoute('threads.index');
+        return redirect(route('threads.index'));
     }
 }

@@ -18,6 +18,13 @@ class Reply extends Model
     protected $with = ['user'];
 
     /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array<string>|bool
+     */
+    protected $guarded = [];
+
+    /**
      * Get the user that owns the Reply.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

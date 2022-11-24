@@ -13,7 +13,7 @@ class StoreThreadRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return ! is_null($this->user());
     }
 
     /**
@@ -24,7 +24,9 @@ class StoreThreadRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => ['required', 'string', 'max:255'],
+            'body' => ['required', 'string'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
         ];
     }
 }

@@ -13,7 +13,7 @@ class StoreReplyRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return ! is_null($this->user());
     }
 
     /**
@@ -24,7 +24,7 @@ class StoreReplyRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'body' => ['required', 'string'],
         ];
     }
 }

@@ -17,9 +17,10 @@ class Thread extends Model
      * @var string[]
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'title',
+        'body',
+        'user_id',
+        'category_id',
     ];
 
     /**
@@ -49,6 +50,7 @@ class Thread extends Model
      */
     public function replies(): HasMany
     {
-        return $this->hasMany(Reply::class, 'thread_id', 'id');
+        return $this->hasMany(Reply::class, 'thread_id', 'id')
+            ->orderByDesc('created_at');
     }
 }
