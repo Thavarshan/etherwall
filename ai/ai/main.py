@@ -1,63 +1,68 @@
+# Importing the packages
+from sklearn.metrics import accuracy_score
+from nltk.corpus import stopwords
+import pandas as pd
 import numpy as np
-
-# Each row is a training example, each column is a feature  [X1, X2, X3]
-X = np.array(([0, 0, 1], [0, 1, 1], [1, 0, 1], [1, 1, 1]), dtype=float)
-y = np.array(([0], [1], [1], [0]), dtype=float)
-
-# Define useful functions
-
-# Activation function
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+import nltk
+import re
+import string
 
 
-def sigmoid(t):
-    return 1/(1+np.exp(-t))
+nltk.download('stopwords')
+stopword = set(stopwords.words('english'))
+stemmer = nltk.SnowballStemmer('english')
+data = pd.read_csv('data.csv')
 
-# Derivative of sigmoid
-
-
-def sigmoid_derivative(p):
-    return p * (1 - p)
-
-# Class definition
-
-
-class NeuralNetwork:
-    def __init__(self, x, y):
-        self.input = x
-        # considering we have 4 nodes in the hidden layer
-        self.weights1 = np.random.rand(self.input.shape[1], 4)
-        self.weights2 = np.random.rand(4, 1)
-        self.y = y
-        self.output = np. zeros(y.shape)
-
-    def feedforward(self):
-        self.layer1 = sigmoid(np.dot(self.input, self.weights1))
-        self.layer2 = sigmoid(np.dot(self.layer1, self.weights2))
-        return self.layer2
-
-    def backprop(self):
-        d_weights2 = np.dot(
-            self.layer1.T, 2*(self.y - self.output)*sigmoid_derivative(self.output))
-        d_weights1 = np.dot(self.input.T, np.dot(2*(self.y - self.output)*sigmoid_derivative(
-            self.output), self.weights2.T)*sigmoid_derivative(self.layer1))
-
-        self.weights1 += d_weights1
-        self.weights2 += d_weights2
-
-    def train(self, X, y):
-        self.output = self.feedforward()
-        self.backprop()
+# To preview the data
+print(data.head())
+data['labels'] = data['class'].map(
+    {0: 'Hate Speech', 1: 'Offensive Speech', 2: 'No Hate and Offensive Speech'})
+data = data[['tweet', 'labels']]
+print(data.head())
 
 
-NN = NeuralNetwork(X, y)
-for i in range(1500):  # trains the NN 1,000 times
-    if i % 100 == 0:
-        print("for iteration # " + str(i) + "\n")
-        print("Input : \n" + str(X))
-        print("Actual Output: \n" + str(y))
-        print("Predicted Output: \n" + str(NN.feedforward()))
-        # mean sum squared loss
-        print("Loss: \n" + str(np.mean(np.square(y - NN.feedforward()))))
-        print("\n")
+def clean(text):
+    text = str(text).lower()
+    text = re.sub('[.?]', '', text)
+    text = re.sub('https?://\S+|www.\S+', '', text)
+    text = re.sub('<.?>+', '', text)
+    text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
+    text = re.sub('\n', '', text)
+    text = re.sub('\w\d\w', '', text)
+    text = [word for word in text.split(' ') if word not in stopword]
+    text = ''.join(text)
+    text = [stemmer.stem(word) for word in text.split(' ')]
+    text = ''.join(text)
+    return text
 
-    NN.train(X, y)
+
+data["tweet"] = data["tweet"].apply(clean)
+x = np.array(data["tweet"])
+y = np.array(data["labels"])
+cv = CountVectorizer()
+X = cv.fit_transform(x)
+
+# Splitting the Data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.33, random_state=42
+)
+
+# Model building
+model = DecisionTreeClassifier()
+
+# Training the model
+model.fit(X_train, y_train)
+
+# Testing the model
+y_pred = model.predict(X_test)
+y_pred  # Accuracy Score of our model
+print(accuracy_score(y_test, y_pred))
+
+# Predicting the outcome
+inp = "You are too bad and I dont like your attitude"
+inp = cv.transform([inp]).toarray()
+
+print(model.predi)
