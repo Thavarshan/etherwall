@@ -17,11 +17,14 @@ stemmer = nltk.SnowballStemmer('english')
 data = pd.read_csv('data/data.csv')
 
 # To preview the data
-print(data.head())
-data['labels'] = data['class'].map(
-    {0: 'Hate Speech', 1: 'Offensive Speech', 2: 'No Hate and Offensive Speech'})
+# print(data.head())
+data['labels'] = data['class'].map({
+    0: 'Hate Speech',
+    1: 'Offensive Speech',
+    2: 'No Hate and Offensive Speech'
+})
 data = data[['tweet', 'labels']]
-print(data.head())
+# print(data.head())
 
 
 def clean(text):
@@ -47,8 +50,7 @@ X = cv.fit_transform(x)
 
 # Splitting the Data
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.33, random_state=42
-)
+    X, y, test_size=0.33, random_state=42)
 
 # Model building
 model = DecisionTreeClassifier()
@@ -62,7 +64,7 @@ y_pred  # Accuracy Score of our model
 print(accuracy_score(y_test, y_pred))
 
 # Predicting the outcome
-inp = 'You are too bad and I dont like your attitude'
+inp = 'It is really awesome'
 inp = cv.transform([inp]).toarray()
 
-print(model.predi)
+print(model.predict(inp))
