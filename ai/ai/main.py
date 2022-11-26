@@ -39,9 +39,9 @@ def clean(text):
     return text
 
 
-data["tweet"] = data["tweet"].apply(clean)
-x = np.array(data["tweet"])
-y = np.array(data["labels"])
+data['tweet'] = data['tweet'].apply(clean)
+x = np.array(data['tweet'])
+y = np.array(data['labels'])
 cv = CountVectorizer()
 X = cv.fit_transform(x)
 
@@ -62,7 +62,7 @@ y_pred  # Accuracy Score of our model
 print(accuracy_score(y_test, y_pred))
 
 # Predicting the outcome
-inp = "You are too bad and I dont like your attitude"
+inp = 'You are too bad and I dont like your attitude'
 inp = cv.transform([inp]).toarray()
 
 print(model.predi)
