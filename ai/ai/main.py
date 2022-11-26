@@ -14,7 +14,7 @@ import string
 nltk.download('stopwords')
 stopword = set(stopwords.words('english'))
 stemmer = nltk.SnowballStemmer('english')
-data = pd.read_csv('data.csv')
+data = pd.read_csv('data/data.csv')
 
 # To preview the data
 print(data.head())
