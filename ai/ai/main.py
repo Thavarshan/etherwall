@@ -14,14 +14,17 @@ import string
 nltk.download('stopwords')
 stopword = set(stopwords.words('english'))
 stemmer = nltk.SnowballStemmer('english')
-data = pd.read_csv('data/data.csv')
 
+# Load data
+data = pd.read_csv('data/tweets.csv')
 # To preview the data
 # print(data.head())
+
+# Process the data
 data['labels'] = data['class'].map({
     0: 'Hate Speech',
     1: 'Offensive Speech',
-    2: 'No Hate and Offensive Speech'
+    2: 'Acceptable Speech'
 })
 data = data[['tweet', 'labels']]
 # print(data.head())
@@ -60,11 +63,11 @@ model.fit(X_train, y_train)
 
 # Testing the model
 y_pred = model.predict(X_test)
-y_pred  # Accuracy Score of our model
-print(accuracy_score(y_test, y_pred))
+y_pred  # Accuracy score of the model
+print('Model accuracy score', accuracy_score(y_test, y_pred))
 
 # Predicting the outcome
-inp = 'It is really awesome'
+inp = 'Thats very kind of you, Thank you.'
 inp = cv.transform([inp]).toarray()
 
 print(model.predict(inp))
