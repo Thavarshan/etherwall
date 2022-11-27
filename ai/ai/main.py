@@ -64,7 +64,7 @@ model.fit(X_train, y_train)
 # Testing the model
 y_pred = model.predict(X_test)
 y_pred  # Accuracy score of the model
-print('Model accuracy score', accuracy_score(y_test, y_pred))
+print('Model accuracy score:', accuracy_score(y_test, y_pred))
 
 # Predicting the outcome
 inp = 'Thats very kind of you, Thank you.'
