@@ -1,4 +1,4 @@
-# Importing the packages
+# Import packages
 from sklearn.metrics import accuracy_score
 from nltk.corpus import stopwords
 import pandas as pd
