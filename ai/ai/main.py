@@ -11,63 +11,62 @@ import re
 import string
 
 
-nltk.download('stopwords')
-stopword = set(stopwords.words('english'))
-stemmer = nltk.SnowballStemmer('english')
+class Evaluator:
+    def __init__(self):
+        nltk.download('stopwords')
+        self.stopword = set(stopwords.words('english'))
+        self.stemmer = nltk.SnowballStemmer('english')
 
-# Load data
-data = pd.read_csv('data/tweets.csv')
-# To preview the data
-# print(data.head())
+    def load_data(self, path):
+        return pd.read_csv(path)
 
-# Process the data
-data['labels'] = data['class'].map({
-    0: 'Hate Speech',
-    1: 'Offensive Speech',
-    2: 'Acceptable Speech'
-})
-data = data[['tweet', 'labels']]
-# print(data.head())
+    def process_data(self, data):
+        data['labels'] = data['class'].map({
+            0: 'Hate Speech',
+            1: 'Offensive Speech',
+            2: 'Acceptable Speech'
+        })
+        data = data[['tweet', 'labels']]
+        return data
 
+    def clean(self, text):
+        text = str(text).lower()
+        text = re.sub('[.?]', '', text)
+        text = re.sub('https?://\S+|www.\S+', '', text)
+        text = re.sub('<.?>+', '', text)
+        text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
+        text = re.sub('\n', '', text)
+        text = re.sub('\w\d\w', '', text)
+        text = [word for word in text.split(' ') if word not in self.stopword]
+        text = ''.join(text)
+        text = [self.stemmer.stem(word) for word in text.split(' ')]
+        text = ''.join(text)
+        return text
 
-def clean(text):
-    text = str(text).lower()
-    text = re.sub('[.?]', '', text)
-    text = re.sub('https?://\S+|www.\S+', '', text)
-    text = re.sub('<.?>+', '', text)
-    text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
-    text = re.sub('\n', '', text)
-    text = re.sub('\w\d\w', '', text)
-    text = [word for word in text.split(' ') if word not in stopword]
-    text = ''.join(text)
-    text = [stemmer.stem(word) for word in text.split(' ')]
-    text = ''.join(text)
-    return text
+    def evaluate(self, text):
+        data = self.load_data('data/tweets.csv')
+        data = self.process_data(data)
+        data['tweet'] = data['tweet'].apply(self.clean)
+        x = np.array(data['tweet'])
+        y = np.array(data['labels'])
+        cv = CountVectorizer()
+        X = cv.fit_transform(x)
 
+        # Splitting the Data
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.33, random_state=42)
 
-data['tweet'] = data['tweet'].apply(clean)
-x = np.array(data['tweet'])
-y = np.array(data['labels'])
-cv = CountVectorizer()
-X = cv.fit_transform(x)
+        # Model building
+        model = DecisionTreeClassifier()
 
-# Splitting the Data
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.33, random_state=42)
+        # Training the model
+        model.fit(X_train, y_train)
 
-# Model building
-model = DecisionTreeClassifier()
+        # Testing the model
+        y_pred = model.predict(X_test)
+        y_pred  # Accuracy score of the model
+        print('Model accuracy score:', accuracy_score(y_test, y_pred))
 
-# Training the model
-model.fit(X_train, y_train)
-
-# Testing the model
-y_pred = model.predict(X_test)
-y_pred  # Accuracy score of the model
-print('Model accuracy score:', accuracy_score(y_test, y_pred))
-
-# Predicting the outcome
-inp = 'Thats very kind of you, Thank you.'
-inp = cv.transform([inp]).toarray()
-
-print(model.predict(inp))
+        # Predicting the outcome
+        text = cv.transform([text]).toarray()
+        return model.predict(text)

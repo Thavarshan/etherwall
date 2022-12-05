@@ -14,6 +14,7 @@ return new class() extends Migration {
     {
         Schema::create('threads', function (Blueprint $table) {
             $table->id();
+            $table->boolean('flagged')->default(false);
             $table->string('title');
             $table->string('body', 2048);
             $table->foreignId('user_id')

@@ -3,9 +3,20 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use App\Services\TextAnalyser\Client;
 
 class AnalyseText
 {
+    public const ACCEPTABLE = 0;
+    public const OFFENSIVE = 'Offensive Speech';
+
+    protected $client;
+
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -16,6 +27,12 @@ class AnalyseText
      */
     public function handle(Request $request, \Closure $next)
     {
+        $decision = $this->client->evaluate($request->input('body') ?? '');
+
+        if ($decision === static::OFFENSIVE) {
+            return back()->dangerBanner('Your submission contains offensive or hateful language.');
+        }
+
         return $next($request);
     }
 }

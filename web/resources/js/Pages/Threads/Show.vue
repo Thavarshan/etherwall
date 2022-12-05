@@ -49,7 +49,7 @@
 
                             <div class="ml-4 flex-1">
                                 <form class="max-w-xl" @submit.prevent="reply">
-                                    <textarea v-model="form.body" placeholder="Type your reply" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm w-full" rows="3"></textarea>
+                                    <textarea v-model="form.body" required placeholder="Type your reply" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm w-full" rows="3"></textarea>
 
                                     <div class="mt-3 flex items-center">
                                         <PrimaryButton type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
@@ -125,6 +125,10 @@ export default {
         },
 
         reply() {
+            if (!this.form.body || this.form.body === '') {
+                alert('Please submit a valid reply.');
+            }
+
             this.form.post(route('replies.store', { thread: this.thread.id }), {
                 errorBag: 'createNewReply',
                 preserveScroll: true,

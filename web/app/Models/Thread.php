@@ -21,6 +21,16 @@ class Thread extends Model
         'body',
         'user_id',
         'category_id',
+        'flagged',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'flagged' => 'boolean',
     ];
 
     /**
