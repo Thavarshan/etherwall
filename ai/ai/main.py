@@ -1,4 +1,5 @@
 import random
+import os
 
 SEED = 32
 random.seed(SEED)
@@ -12,11 +13,13 @@ from sklearn.metrics import  f1_score
 
 from torch import nn
 import torch
-from torchtext.legacy import data
+from collections import Counter
+from torchtext import data
 from torch.nn  import functional as F
 import torch.optim as  optim 
 from sklearn.model_selection import train_test_split
 
+from pathlib import Path
 # For Text processing
 import nltk
 nltk.download("punkt")
@@ -160,10 +163,44 @@ def calculateMetrics(ypred,ytrue):
     f1_average  = f1_score(ytrue,ypred,average="macro")
     return " f1 score: "+str(round(f1,3))+" f1 average: "+str(round(f1_average,3))+" accuracy: "+str(round(acc,3))
 
+def saveVocab(vocab, file):
+    path = Path(file).parent.absolute().mkdir(parents=True, exist_ok=True)
+    print("Saving vocab file " + vocab.__str__() + " --> " + file)
+    torch.save(vocab, file)
+
+def loadVocab(file):
+    if os.path.isfile(file):
+        print("Reading vocab file: " + file)
+        return torch.load(file)
+    else:
+        print("Error reading file: " + file + ". file do not exist.")
+
+def saveModel(model, file):
+    path = Path(file).parent.absolute().mkdir(parents=True, exist_ok=True)
+    print("Saving vocab file " + model.__str__() + " --> " + file)
+    torch.save(model.state_dict(), file)
+
+
+def loadModel(file, vocabSize, device):
+    if os.path.isfile(file):
+        print("Reading model file: " + file)
+        model = TextTransformer(vocabSize, device)
+        model.load_state_dict(torch.load(file, map_location=torch.device(device)))
+        return model
+    else:
+        print("Error reading file: " + file + ". file do not exist.")
+
+def inference(model, vocab, inString, device):
+    model.eval() #switching to evaluation mode.
+    model.to(device)
+    x = TEXT.process([inString])
+    x = x.to(device)
+    pred = model(x).squeeze().cpu().detach()
+    return torch.round(pred).numpy()
 
 def trainModel(device, episodeCount=20, batchSize=128):
     train_data, valid_data, test_data, (TEXT, LABEL) = processText()
-
+  
     train_iterator,valid_iterator,test_iterator= data.BucketIterator.splits(
     (train_data,valid_data,test_data), 
     batch_size = batchSize,
@@ -207,8 +244,26 @@ def trainModel(device, episodeCount=20, batchSize=128):
         err = F.binary_cross_entropy(valpreds,valtrues)
         print("validation BCE loss: ",err.item(),calculateMetrics(torch.round(valpreds).numpy(),valtrues.numpy()))
 
+    return myTransformer, TEXT
+
 if __name__ == '__main__':
     print("Hellow World!")
     device = deviceSelect()
 
-    trainModel(device, 2)
+    #needed for training and saving the models.
+    # myModel, TEXT = trainModel(device, 5)
+    # saveVocab(TEXT, "../vocab/TEXT_obj.pth")
+    # saveModel(myModel, "../model/textTransformer_states.pth")
+
+    #inference
+    TEXT = loadVocab('../vocab/TEXT_obj_kaggle_trained.pth')
+    vocabSize = len(TEXT.vocab)
+    myModel = loadModel('../model/textTransformer_states_kaggle_trained.pth', vocabSize, device)
+
+    print(inference(myModel, TEXT, "!!! RT @mayasolovely: As a woman you shouldn't complain about cleaning up your house. &amp; as a man you should always take the trash out...", device))
+    print(inference(myModel, TEXT, "!!!!!!!!!!!!! RT @ShenikaRoberts: The shit you hear about me might be true or it might be faker than the bitch who told it to ya &#57361;", device))
+
+
+
+
+    
