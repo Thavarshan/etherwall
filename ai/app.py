@@ -45,7 +45,7 @@ def validate():
         return response
     except Exception as e:
         response = app.response_class(
-            response=json.dumps(outcome),
+            response=json.dumps(str(e)),
             status=500,
             mimetype='application/json'
         )

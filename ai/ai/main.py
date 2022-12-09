@@ -21,7 +21,7 @@ import pandas as pd
 import numpy as np
 import random
 import os
-import dill 
+import dill
 
 SEED = 32
 random.seed(SEED)
@@ -229,18 +229,17 @@ def trainModel(device, episodeCount=20, batchSize=128):
     return myTransformer, TEXT
 
 
-if __name__ == '__main__':
-    device = deviceSelect()
+# if __name__ == '__main__':
+#     device = deviceSelect()
 #     # needed for training and saving the models.
 #     # model, TEXT = trainModel(device, 5)
 #     # saveVocab(TEXT, 'ai/vocab/TEXT_obj.pth')
 #     # saveModel(model, 'ai/model/textTransformer_states.pth')
     # inference
-    TEXT = loadVocab('ai/vocab/TEXT_obj_kaggle_trained_2.pth')
-    vocabSize = len(TEXT.vocab)
-    model = loadModel(
-        'ai/model/textTransformer_states_kaggle_trained_2.pth', vocabSize, device)
-    print(inference(model, TEXT, 'The shit just blows me..claim you so faithful and down for somebody but still fucking with hoes!', device))
-    print(inference(model, TEXT, "!!! RT @mayasolovely: As a woman you shouldn't complain about cleaning up your house. &amp; as a man you should always take the trash out...", device))
-    print(inference(model, TEXT, "!!!!!!!!!!!!! RT @ShenikaRoberts: The shit you hear about me might be true or it might be faker than the bitch who told it to ya &#57361;", device))
-
+    # TEXT = loadVocab('ai/vocab/TEXT_obj_kaggle_trained_2.pth')
+    # vocabSize = len(TEXT.vocab)
+    # model = loadModel(
+    #     'ai/model/textTransformer_states_kaggle_trained_2.pth', vocabSize, device)
+    # print(inference(model, TEXT, 'The shit just blows me..claim you so faithful and down for somebody but still fucking with hoes!', device))
+    # print(inference(model, TEXT, "!!! RT @mayasolovely: As a woman you shouldn't complain about cleaning up your house. &amp; as a man you should always take the trash out...", device))
+    # print(inference(model, TEXT, "!!!!!!!!!!!!! RT @ShenikaRoberts: The shit you hear about me might be true or it might be faker than the bitch who told it to ya &#57361;", device))
