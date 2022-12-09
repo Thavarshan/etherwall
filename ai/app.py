@@ -53,4 +53,14 @@ def validate():
 
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
+    # inference
+    device = deviceSelect()
+    TEXT = loadVocab('ai/vocab/TEXT_obj_kaggle_trained_2.pth')
+    vocabSize = len(TEXT.vocab)
+    model = loadModel(
+        'ai/model/textTransformer_states_kaggle_trained_2.pth', vocabSize, device)
+    print(inference(model, TEXT, 'The shit just blows me..claim you so faithful and down for somebody but still fucking with hoes!', device))
+    print(inference(model, TEXT, "!!! RT @mayasolovely: As a woman you shouldn't complain about cleaning up your house. &amp; as a man you should always take the trash out...", device))
+    print(inference(model, TEXT, "!!!!!!!!!!!!! RT @ShenikaRoberts: The shit you hear about me might be true or it might be faker than the bitch who told it to ya &#57361;", device))
+    

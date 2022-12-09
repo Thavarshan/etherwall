@@ -21,6 +21,7 @@ import pandas as pd
 import numpy as np
 import random
 import os
+import dill 
 
 SEED = 32
 random.seed(SEED)
@@ -148,13 +149,13 @@ def calculateMetrics(ypred, ytrue):
 def saveVocab(vocab, file):
     path = Path(file).parent.absolute().mkdir(parents=True, exist_ok=True)
     print('Saving vocab file ' + vocab.__str__() + ' --> ' + file)
-    torch.save(vocab, file)
+    torch.save(vocab, file, pickle_module=dill)
 
 
 def loadVocab(file):
     if os.path.isfile(file):
         print('Reading vocab file: ' + file)
-        return torch.load(file)
+        return torch.load(file, pickle_module=dill)
     else:
         print('Error reading file: ' + file + '. file do not exist.')
 
@@ -162,7 +163,7 @@ def loadVocab(file):
 def saveModel(model, file):
     path = Path(file).parent.absolute().mkdir(parents=True, exist_ok=True)
     print('Saving vocab file ' + model.__str__() + ' --> ' + file)
-    torch.save(model.state_dict(), file)
+    torch.save(model.state_dict(), file, pickle_module=dill)
 
 
 def loadModel(file, vocabSize, device):
@@ -170,7 +171,7 @@ def loadModel(file, vocabSize, device):
         print('Reading model file: ' + file)
         model = TextTransformer(vocabSize, device)
         model.load_state_dict(torch.load(
-            file, map_location=torch.device(device)))
+            file, map_location=torch.device(device), pickle_module=dill))
         return model
     else:
         print('Error reading file: ' + file + '. file do not exist.')
@@ -182,6 +183,7 @@ def inference(model, vocab, inString, device):
     x = vocab.process([inString])
     x = x.to(device)
     pred = model(x).squeeze().cpu().detach()
+    print(pred)
     return torch.round(pred).numpy()
 
 
@@ -227,16 +229,18 @@ def trainModel(device, episodeCount=20, batchSize=128):
     return myTransformer, TEXT
 
 
-# if __name__ == '__main__':
-#     device = deviceSelect()
+if __name__ == '__main__':
+    device = deviceSelect()
 #     # needed for training and saving the models.
 #     # model, TEXT = trainModel(device, 5)
 #     # saveVocab(TEXT, 'ai/vocab/TEXT_obj.pth')
 #     # saveModel(model, 'ai/model/textTransformer_states.pth')
-#     # inference
-#     TEXT = loadVocab('ai/vocab/TEXT_obj_kaggle_trained.pth')
-#     vocabSize = len(TEXT.vocab)
-#     model = loadModel(
-#         'ai/model/textTransformer_states_kaggle_trained.pth', vocabSize, device)
-#     print(inference(model, TEXT, 'The shit just blows me..claim you so faithful and down for somebody but still fucking with hoes!', device))
-#     print(inference(model, TEXT, 'Lemmie eat a Oreo &amp; do these dishes. One oreo? Lol;', device))
+    # inference
+    TEXT = loadVocab('ai/vocab/TEXT_obj_kaggle_trained_2.pth')
+    vocabSize = len(TEXT.vocab)
+    model = loadModel(
+        'ai/model/textTransformer_states_kaggle_trained_2.pth', vocabSize, device)
+    print(inference(model, TEXT, 'The shit just blows me..claim you so faithful and down for somebody but still fucking with hoes!', device))
+    print(inference(model, TEXT, "!!! RT @mayasolovely: As a woman you shouldn't complain about cleaning up your house. &amp; as a man you should always take the trash out...", device))
+    print(inference(model, TEXT, "!!!!!!!!!!!!! RT @ShenikaRoberts: The shit you hear about me might be true or it might be faker than the bitch who told it to ya &#57361;", device))
+
