@@ -7,8 +7,8 @@ use App\Services\TextAnalyser\Client;
 
 class AnalyseText
 {
-    public const ACCEPTABLE = 0;
-    public const OFFENSIVE = 'Offensive Speech';
+    public const ACCEPTABLE = '0';
+    public const OFFENSIVE = '1';
 
     protected $client;
 
