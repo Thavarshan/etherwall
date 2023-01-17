@@ -106,7 +106,7 @@ You may now be able to use the following credentials to access the forum website
 
 ## Contributing
 
-Thank you for considering contributing to Birthdays! You can read the contribution guide [here](.github/CONTRIBUTING.md).
+Thank you for considering contributing to Etherwall! You can read the contribution guide [here](.github/CONTRIBUTING.md).
 
 ## Security Vulnerabilities
 
@@ -114,4 +114,4 @@ Please review [our security policy](https://github.com/Thavarshan/etherwall/secu
 
 ## License
 
-Birthdays is open-sourced software licensed under the [MIT license](LICENSE).
+Etherwall is open-sourced software licensed under the [MIT license](LICENSE).
