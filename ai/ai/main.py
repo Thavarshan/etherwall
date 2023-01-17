@@ -230,12 +230,12 @@ def trainModel(device, episodeCount=20, batchSize=128):
 
 
 # if __name__ == '__main__':
-#     device = deviceSelect()
-    # needed for training and saving the models.
+    # device = deviceSelect()
+    # # needed for training and saving the models.
     # model, TEXT = trainModel(device, 5)
     # saveVocab(TEXT, 'ai/vocab/TEXT_obj.pth')
     # saveModel(model, 'ai/model/textTransformer_states.pth')
-    # inference
+    # # inference
     # TEXT = loadVocab('ai/vocab/TEXT_obj_kaggle_trained_2.pth')
     # vocabSize = len(TEXT.vocab)
     # model = loadModel(
