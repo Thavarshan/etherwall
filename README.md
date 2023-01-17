@@ -1,6 +1,6 @@
-# Forumbot
+# Etherwall
 
-Forumbot is a single project which contains two applications; one a simple forum website with a functional website and database made using PHP and MySQL and the other an AI Neural Network with an API wrapper that performs Sentiment Analysis to identify and detect hateful and or offensive language. Both applications are simple implementations and are not robust solutions for real-world usage.
+Etherwall is a single project which contains two applications; one a simple forum website with a functional website and database made using PHP and MySQL and the other an AI Neural Network with an API wrapper that performs Sentiment Analysis to identify and detect hateful and or offensive language. Both applications are simple implementations and are not robust solutions for real-world usage.
 
 The project consists of two parts; one a functioning forum discussion website where users can log in and create new discussions (threads) and to these discussion other users can make replies to; thereby propagate a conversation with each other. Text inputs are provided to type in user replies and the content is saved using a structured database that is attached to the project. The second part is the actual AI module wrapped with an API that allows access to receive and send data. The AI module is a neural network that is built using basic concepts with a manually trained model and datasets acquired through third-party means.
 
@@ -103,3 +103,15 @@ You may now be able to use the following credentials to access the forum website
 | Email      | example@email.com |
 | ----------- | ----------- |
 | Password   | password |
+
+## Contributing
+
+Thank you for considering contributing to Birthdays! You can read the contribution guide [here](.github/CONTRIBUTING.md).
+
+## Security Vulnerabilities
+
+Please review [our security policy](https://github.com/Thavarshan/etherwall/security/policy) on how to report security vulnerabilities.
+
+## License
+
+Birthdays is open-sourced software licensed under the [MIT license](LICENSE).
