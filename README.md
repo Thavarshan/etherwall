@@ -1,12 +1,12 @@
 # Etherwall
 
-Etherwall is a single project which contains two applications; one a simple forum website with a functional website and database made using PHP and MySQL and the other an AI Neural Network with an API wrapper that performs Sentiment Analysis to identify and detect hateful and or offensive language. Both applications are simple implementations and are not robust solutions for real-world usage.
+Etherwall is a single project which contains two applications; one a simple forum website with a functional website and database made using PHP and MySQL and the other an AI Neural Network [(Euclidius)](https://github.com/Thavarshan/euclidius) with an API wrapper that performs Sentiment Analysis to identify and detect hateful and or offensive language. Both applications are simple implementations and are not robust solutions for real-world usage.
 
 The project consists of two parts; one a functioning forum discussion website where users can log in and create new discussions (threads) and to these discussion other users can make replies to; thereby propagate a conversation with each other. Text inputs are provided to type in user replies and the content is saved using a structured database that is attached to the project. The second part is the actual AI module wrapped with an API that allows access to receive and send data. The AI module is a neural network that is built using basic concepts with a manually trained model and datasets acquired through third-party means.
 
 The idea is for when a user creates a new thread or posts a new reply the textual content before being saved into the database is sent to the AI module API and is analysed for offensive and or hateful content. If the AI model evaluates the content to be acceptable then the user’s data is saved into the database and is displayed on the forum website, otherwise an alert message is sent to the user creating the text post to notify the user of the unacceptable content present in their posts. The below diagram illustrates the flow of the idea.
 
-## Hate speech detector API
+## Hate speech detector API [(Euclidius)](https://github.com/Thavarshan/euclidius)
 
 The AI module is a neural network which performs hate speech detection that when textual content is input, analyses the sentiment of the sentences and determines if the content is considered hateful, offensive or is acceptable. The out is binary meaning the text is determined to be either unacceptable (contains hate/offensive content) or acceptable.
 
